@@ -11,7 +11,7 @@
             "name": "Philip Venter",
             "email": "philip@datasmart.co.za"
         }
-    ],
+     ],
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": ">=5.0.0"
