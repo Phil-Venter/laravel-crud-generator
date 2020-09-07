@@ -4,6 +4,7 @@ namespace CrudGenerator\Console\Commands;
 
 use Illuminate\Container\Container;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use DB;
 use Artisan;
 
@@ -40,7 +41,7 @@ class CrudGeneratorCommand extends Command
      */
     public function handle()
     {
-        $modelname = strtolower($this->argument('model-name'));
+        $modelname = Str::lower($this->argument('model-name'));
         $prefix = \Config::get('database.connections.mysql.prefix');
         $custom_table_name = $this->option('table-name');
         $custom_controller = $this->option('custom-controller');
@@ -48,23 +49,23 @@ class CrudGeneratorCommand extends Command
 
         $tocreate = [];
 
-        if($modelname == 'all') {
+        if ($modelname == 'all') {
             $pretables = json_decode(json_encode(DB::select("show tables")), true);
             $tables = [];
-            foreach($pretables as $p) { 
+            foreach ($pretables as $p) {
                 list($key) = array_keys($p);
-                $tables[] = $p[$key]; 
+                $tables[] = $p[$key];
             }
-            $this->info("List of tables: ".implode($tables, ","));
-            
+            $this->info("List of tables: " . implode(",", $tables));
+
             foreach ($tables as $t) {
                 // Ignore tables with different prefix
-                if($prefix == '' || str_contains($t, $prefix)) { 
-                    $t = strtolower(substr($t, strlen($prefix)));
-                    $toadd = ['modelname'=> str_singular($t), 'tablename'=>''];
-                    if(str_plural($toadd['modelname']) != $t) {
+                if ($prefix == '' || Str::contains($t, $prefix)) {
+                    $t = Str::lower(substr($t, strlen($prefix)));
+                    $toadd = ['modelname' => Str::singular($t), 'tablename' => ''];
+                    if (Str::plural($toadd['modelname']) != $t) {
                         $toadd['tablename'] = $t;
-                    } 
+                    }
                     $tocreate[] = $toadd;
                 }
             }
@@ -72,18 +73,16 @@ class CrudGeneratorCommand extends Command
             $custom_table_name = null;
             $custom_controller = null;
             $singular = null;
-        }
-        else {
+        } else {
 
             $tocreate = [
                 'modelname' => $modelname,
                 'tablename' => '',
             ];
-            if($singular) {
-                $tocreate['tablename'] = strtolower($modelname);    
-            }
-            else if($custom_table_name) { 
-                $tocreate['tablename'] = $custom_table_name; 
+            if ($singular) {
+                $tocreate['tablename'] = Str::lower($modelname);
+            } else if ($custom_table_name) {
+                $tocreate['tablename'] = $custom_table_name;
             }
 
             $tocreate = [$tocreate];
@@ -96,38 +95,15 @@ class CrudGeneratorCommand extends Command
             $generator->output = $this;
 
             $generator->appNamespace = Container::getInstance()->getNamespace();
-            $generator->modelName = ucfirst($c['modelname']);
+            $generator->modelName = Str::ucfirst($c['modelname']);
             $generator->tableName = $c['tablename'];
 
             $generator->prefix = $prefix;
             $generator->force = $this->option('force');
             $generator->layout = $this->option('master-layout');
-            $generator->controllerName = ucfirst(strtolower($custom_controller)) ?: str_plural($generator->modelName);
+            $generator->controllerName = Str::ucfirst(Str::lower($custom_controller)) ?: Str::plural($generator->modelName);
 
             $generator->Generate();
         }
-
     }
-
-    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
