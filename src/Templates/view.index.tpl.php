@@ -39,8 +39,8 @@
 <script type="text/javascript">
     var theGrid = null;
 
-    var data = {!! json_encode($model) !!}.map(_ => Object.values(_));
-    var url = {{ url('/[[route_path]]') }};
+    var data = JSON.parse("{!! json_encode($model) !!}").map(_ => Object.values(_));
+    var url = "{{ url('/[[route_path]]') }}";
 
     $(document).ready(function() {
         theGrid = $('#thegrid').DataTable({
