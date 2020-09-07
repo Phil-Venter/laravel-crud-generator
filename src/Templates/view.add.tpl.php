@@ -35,6 +35,14 @@
                 </div>
             </div>
             [[endif]]
+            [[if:i.type=='text']]
+            <div class="form-group">
+                <label for="[[i.name]]" class="col-sm-3 control-label">[[i.display]]</label>
+                <div class="col-sm-3">
+                    <textarea name="[[i.name]]" id="[[i.name]]" class="form-control" rows="5">{{isset($model) ? $model['[[i.name]]']?? '' : ''}}</textarea>
+                </div>
+            </div>
+            [[endif]]
             [[if:i.type=='number']]
             <div class="form-group">
                 <label for="[[i.name]]" class="col-sm-3 control-label">[[i.display]]</label>
@@ -51,15 +59,7 @@
                 </div>
             </div>
             [[endif]]
-            [[if:i.type=='text']]
-            <div class="form-group">
-                <label for="[[i.name]]" class="col-sm-3 control-label">[[i.display]]</label>
-                <div class="col-sm-3">
-                    <textarea name="[[i.name]]" id="[[i.name]]" class="form-control" rows="5">{{isset($model) ? $model['[[i.name]]']?? '' : ''}}</textarea>
-                </div>
-            </div>
-            [[endif]]
-            [[if:i.type=='check']]
+            [[if:i.type=='boolean']]
             <div class="col-sm-9 col-sm-offset-3">
                 <label>
                     <input name="[[i.name]]" id="[[i.name]]" type="checkbox" {{ isset($model) ? $model['[[i.name]]'] ? 'checked' : '' : '' }}> [[i.display]]
@@ -88,10 +88,5 @@
 
     </div>
 </div>
-
-
-
-
-
 
 @endsection

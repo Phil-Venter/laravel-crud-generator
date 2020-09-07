@@ -39,24 +39,25 @@
 <script type="text/javascript">
     var theGrid = null;
 
-    var data = {!!json_encode($model) !!}.map(_ => Object.values(_));
+    var data = {!! json_encode($model) !!}.map(_ => Object.values(_));
+    var url = {{ url('/[[route_path]]') }};
 
     $(document).ready(function() {
         theGrid = $('#thegrid').DataTable({
             data,
             columnDefs: [{
                 render: function(data, type, row) {
-                    return '<a href="{{ url('/[[route_path]]') }}/'+row[0]+'">'+data+'</a>';
+                    return `<a href="${url}/${row[0]}">${data}</a>`;
                 },
                 targets: 1
             }, {
                 render: function(data, type, row) {
-                    return '<a href="{{ url('/[[route_path]]') }}/'+row[0]+'/edit" class="btn btn-default">Update</a>';
+                    return `<a href="${url}/${row[0]}/edit" class="btn btn-default">Update</a>`;
                 },
                 targets: [[num_columns]]
             }, {
                 render: function(data, type, row) {
-                    return '<a href="#" onclick="return doDelete('+row[0]+')" class="btn btn-danger">Delete</a>';
+                    return `<a href="#" onclick="return doDelete(${row[0]}) class="btn btn-danger">Delete</a>`;
                 },
                 targets: [[num_columns]] + 1
             }]
@@ -66,7 +67,7 @@
     function doDelete(id) {
         if (confirm('You really want to delete this record?')) {
             $("#delete-id").val(id);
-            $("#delete").attr("action", "{{ url('/[[route_path]]') }}/" + id)
+            $("#delete").attr("action", `${url}/${id}`);
             $("#delete").submit();
         }
     }

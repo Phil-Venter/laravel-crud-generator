@@ -6,6 +6,7 @@ namespace CrudGenerator;
 use Illuminate\Console\Command;
 use DB;
 use Artisan;
+use Illuminate\Support\Str;
 
 class CrudGeneratorFileCreator
 {
@@ -83,7 +84,7 @@ class CrudGeneratorFileCreator
 
     protected function getValFromExpression($exp, $data)
     {
-        if (str_contains($exp, "'")) {
+        if (Str::contains($exp, "'")) {
             return trim($exp, "'");
         } else {
             if (array_key_exists($exp, $data)) {

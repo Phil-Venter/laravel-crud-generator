@@ -18,9 +18,10 @@ class [[controller_name]]Controller extends Controller
   public function index(Request $request)
   {
     $[[model_plural]] = [[model_uc]]::all();
-    return view('[[view_folder]].index', [
-      'model' => $[[model_plural]]
-    ]);
+
+    $data['model'] = $[[model_plural]];
+
+    return view('[[view_folder]].index', $data);
   }
 
   public function create(Request $request)
@@ -31,17 +32,19 @@ class [[controller_name]]Controller extends Controller
   public function edit(Request $request, $id)
   {
     $[[model_singular]] = [[model_uc]]::findOrFail($id);
-    return view('[[view_folder]].add', [
-      'model' => $[[model_singular]]
-    ]);
+
+    $data['model'] = $[[model_singular]];
+
+    return view('[[view_folder]].add', $data);
   }
 
   public function show(Request $request, $id)
   {
     $[[model_singular]] = [[model_uc]]::findOrFail($id);
-    return view('[[view_folder]].show', [
-      'model' => $[[model_singular]]
-    ]);
+
+    $data['model'] = $[[model_singular]];
+
+    return view('[[view_folder]].show', $data);
   }
 
   public function update(Request $request)
@@ -54,12 +57,24 @@ class [[controller_name]]Controller extends Controller
     }
 
     [[foreach:columns]]
-      [[if:i.type=='string']] $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? ''; [[endif]]
-      [[if:i.type=='number']] $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? 0; [[endif]]
-      [[if:i.type=='date']]   $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? date('m/d/Y h:i:s a', time()); [[endif]]
-      [[if:i.type=='text']]   $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? ''; [[endif]]
-      [[if:i.type=='check']]  $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? false; [[endif]]
-      [[if:i.type=='unknown']] $[[model_singular]]->[[i.name]] = $request->[[i.name]]; [[endif]]
+    [[if:i.type=='string']]
+    $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? '';
+    [[endif]]
+    [[if:i.type=='number']]
+    $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? 0;
+    [[endif]]
+    [[if:i.type=='date']]
+    $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? date('m/d/Y h:i:s a', time());
+    [[endif]]
+    [[if:i.type=='text']]
+    $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? '';
+    [[endif]]
+    [[if:i.type== 'boolean']]
+    $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? false;
+    [[endif]]
+    [[if:i.type=='unknown']]
+    $[[model_singular]]->[[i.name]] = $request->[[i.name]];
+    [[endif]]
     [[endforeach]]
 
     $[[model_singular]]->save();

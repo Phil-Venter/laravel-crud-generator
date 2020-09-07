@@ -137,23 +137,9 @@ class CrudGeneratorService
 
     protected function getTypeFromDBType($dbtype)
     {
-        var_dump($dbtype)."\n";
-        if (Str::contains($dbtype, ['varchar'])) {
-            return 'string';
-        }
-        if (Str::contains($dbtype, ['int', 'float'])) {
-            return 'number';
-        }
-        if (Str::contains($dbtype, ['date', 'time'])) {
-            return 'date';
-        }
-        if (Str::contains($dbtype, ['text'])) {
-            return 'text';
-        }
-        if (Str::contains($dbtype, ['bool', 'check'])) {
-            return 'check';
-        }
-        return 'unknown';
+        $type = Helpers::types($dbtype);
+        $this->output->info('[DB MAPPING]: ' . $dbtype . ' => ' . $type);
+        return $type;
     }
 
     protected function createModel($modelname, $prefix, $table_name)
