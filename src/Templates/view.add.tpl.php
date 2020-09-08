@@ -78,7 +78,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-success pull-right">
                         <i class="fa fa-plus"></i> Save
                     </button>
                     <a class="btn btn-default" href="{{ url('/[[route_path]]') }}"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>

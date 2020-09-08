@@ -10,10 +10,7 @@
     </div>
 
     <div class="panel-body">
-        <div class="">
-            <table class="table table-striped" id="thegrid"></table>
-        </div>
-
+	<table class="table table-striped" id="thegrid"></table>
     </div>
 </div>
 <form action="" method="post" id="delete">
@@ -40,13 +37,13 @@
             data,
             columns,
             columnDefs: [{
-                render: (data, type, row) => `<a href="${url}/${row[0]}">${data}</a>`,
+                render: (data, type, row) => `<a href="${url}/${row.id}">${data}</a>`,
                 targets: 1
             }, {
-                render: (data, type, row) => `<a href="${url}/${row[0]}/edit" class="btn btn-default">Update</a>`,
+                render: (data, type, row) => `<a href="${url}/${row.id}/edit" class="btn btn-default">Update</a>`,
                 targets: columns.length
             }, {
-                render: (data, type, row) => `<a href="#" onclick="return doDelete(${row[0]})" class="btn btn-danger">Delete</a>`,
+                render: (data, type, row) => `<a href="#" onclick="return doDelete(${row.id})" class="btn btn-danger">Delete</a>`,
                 targets: columns.length + 1
             }]
         });
