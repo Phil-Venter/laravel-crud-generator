@@ -11,19 +11,7 @@
 
     <div class="panel-body">
         <div class="">
-            <table class="table table-striped" id="thegrid">
-                <thead>
-                    <tr>
-                        [[foreach:columns]]
-                        <th>[[i.display]]</th>
-                        [[endforeach]]
-                        <th style="width:50px"></th>
-                        <th style="width:50px"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <table class="table table-striped" id="thegrid"></table>
         </div>
 
     </div>
@@ -37,29 +25,29 @@
 
 @section('scripts')
 <script type="text/javascript">
-    var theGrid = null;
+    const url = "{{ url('/[[route_path]]') }}";
+    const data = {!!json_encode($model) !!};
+    const columns = [
+        [[foreach:columns]]
+            { title: "[[i.display]]", data: "[[i.name]]" },
+        [[endforeach]]
+    ];
 
-    var data = JSON.parse("{!! json_encode($model) !!}").map(_ => Object.values(_));
-    var url = "{{ url('/[[route_path]]') }}";
+    let theGrid = null;
 
     $(document).ready(function() {
         theGrid = $('#thegrid').DataTable({
             data,
+            columns,
             columnDefs: [{
-                render: function(data, type, row) {
-                    return `<a href="${url}/${row[0]}">${data}</a>`;
-                },
+                render: (data, type, row) => `<a href="${url}/${row[0]}">${data}</a>`,
                 targets: 1
             }, {
-                render: function(data, type, row) {
-                    return `<a href="${url}/${row[0]}/edit" class="btn btn-default">Update</a>`;
-                },
-                targets: [[num_columns]]
+                render: (data, type, row) => `<a href="${url}/${row[0]}/edit" class="btn btn-default">Update</a>`,
+                targets: columns.length
             }, {
-                render: function(data, type, row) {
-                    return `<a href="#" onclick="return doDelete(${row[0]}) class="btn btn-danger">Delete</a>`;
-                },
-                targets: [[num_columns]] + 1
+                render: (data, type, row) => `<a href="#" onclick="return doDelete(${row[0]})" class="btn btn-danger">Delete</a>`,
+                targets: columns.length + 1
             }]
         });
     });
