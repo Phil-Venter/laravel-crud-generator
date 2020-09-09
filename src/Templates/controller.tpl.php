@@ -18,10 +18,7 @@ class [[controller_name]]Controller extends Controller
   public function index(Request $request)
   {
     $[[model_plural]] = [[model_uc]]::all();
-
-    $data['model'] = $[[model_plural]];
-
-    return view('[[view_folder]].index', $data);
+    return view('[[view_folder]].index', compact('[[model_plural]]'));
   }
 
   public function create(Request $request)
@@ -32,54 +29,48 @@ class [[controller_name]]Controller extends Controller
   public function edit(Request $request, $id)
   {
     $[[model_singular]] = [[model_uc]]::findOrFail($id);
-
-    $data['model'] = $[[model_singular]];
-
-    return view('[[view_folder]].add', $data);
+    return view('[[view_folder]].add', compact('[[model_singular]]'));
   }
 
   public function show(Request $request, $id)
   {
     $[[model_singular]] = [[model_uc]]::findOrFail($id);
-
-    $data['model'] = $[[model_singular]];
-
-    return view('[[view_folder]].show', $data);
+    return view('[[view_folder]].show', compact('[[model_singular]]'));
   }
 
   public function update(Request $request)
   {
     $[[model_singular]] = null;
-    if($request->id > 0) {
+    if ($request->id > 0) {
       $[[model_singular]] = [[model_uc]]::findOrFail($request->id);
-    } else {
+      } else {
       $[[model_singular]] = new [[model_uc]];
     }
 
     [[foreach:columns]]
-    [[if:i.type=='string']]
-    $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? '';
-    [[endif]]
-    [[if:i.type=='number']]
-    $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? 0;
-    [[endif]]
-    [[if:i.type=='date']]
-    $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? date('m/d/Y h:i:s a', time());
-    [[endif]]
-    [[if:i.type=='text']]
-    $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? '';
-    [[endif]]
-    [[if:i.type== 'boolean']]
-    $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? false;
-    [[endif]]
-    [[if:i.type=='unknown']]
-    $[[model_singular]]->[[i.name]] = $request->[[i.name]];
-    [[endif]]
+      [[ if:i.type == 'string' ]]
+      $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? '';
+      [[endif]]
+      [[ if:i.type == 'number' ]]
+      $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? 0;
+      [[endif]]
+      [[ if:i.type == 'date' ]]
+      $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? date('m/d/Y h:i:s a', time());
+      [[endif]]
+      [[ if:i.type == 'text' ]]
+      $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? '';
+      [[endif]]
+      [[ if:i.type == 'boolean' ]]
+      $[[model_singular]]->[[i.name]] = $request->[[i.name]] ?? false;
+      [[endif]]
+      [[ if:i.type == 'unknown' ]]
+      $[[model_singular]]->[[i.name]] = $request->[[i.name]];
+      [[endif]]
     [[endforeach]]
 
     $[[model_singular]]->save();
 
-    return redirect('/[[route_path]]');
+    return route('[[route_path]].index')->redirect();
   }
 
   public function store(Request $request)
@@ -93,6 +84,6 @@ class [[controller_name]]Controller extends Controller
 
     $[[model_singular]]->delete();
 
-    return redirect('/[[route_path]]');
+    return route('[[ route_path ]].index')->redirect();
   }
 }

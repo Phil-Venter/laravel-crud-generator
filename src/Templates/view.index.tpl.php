@@ -1,60 +1,51 @@
-@extends('[[custom_master]]')
+@extends('[[ custom_master ]]')
 
 @section('content')
-<h2 class="page-header">{{ ucfirst('[[model_plural]]') }}</h2>
-<a href="{{url('[[route_path]]/create')}}" class="btn btn-primary pull-right" role="button">Add [[model_singular]]</a>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        List of {{ ucfirst('[[model_plural]]') }}
-    </div>
-
-    <div class="panel-body">
-	<table class="table table-striped" id="thegrid"></table>
-    </div>
-</div>
-<form action="" method="post" id="delete">
-    {{ method_field('DELETE') }}
-    {{ csrf_field() }}
-    <input type="hidden" id="delete-id" name="id" />
+<form action="" method="post" id="delete" style="display: none">
+  {{ method_field('DELETE') }}
+  {{ csrf_field() }}
+  <input type="hidden" id="delete-id" name="id" />
 </form>
-@endsection
-
-@section('scripts')
-<script type="text/javascript">
-    const url = "{{ url('/[[route_path]]') }}";
-    const data = {!!json_encode($model) !!};
-    const columns = [
-        [[foreach:columns]]
-            { title: "[[i.display]]", data: "[[i.name]]" },
-        [[endforeach]]
-    ];
-
-    let theGrid = null;
-
-    $(document).ready(function() {
-        theGrid = $('#thegrid').DataTable({
-            data,
-            columns,
-            columnDefs: [{
-                render: (data, type, row) => `<a href="${url}/${row.id}">${data}</a>`,
-                targets: 1
-            }, {
-                render: (data, type, row) => `<a href="${url}/${row.id}/edit" class="btn btn-default">Update</a>`,
-                targets: columns.length
-            }, {
-                render: (data, type, row) => `<a href="#" onclick="return doDelete(${row.id})" class="btn btn-danger">Delete</a>`,
-                targets: columns.length + 1
-            }]
-        });
-    });
-
-    function doDelete(id) {
-        if (confirm('You really want to delete this record?')) {
-            $("#delete-id").val(id);
-            $("#delete").attr("action", `${url}/${id}`);
-            $("#delete").submit();
-        }
+<script>
+  function doDelete(id) {
+    if (confirm('You really want to delete this record?')) {
+      $("#delete-id").val(id);
+      $("#delete").attr("action", `{{ route('[[ route_path ]].index') }}/${id}`);
+      $("#delete").submit();
     }
+  }
 </script>
+<h2 class="page-header">{{ ucfirst('[[ model_plural ]]') }}</h2>
+<a href="{{ route('[[ route_path ]].create') }}" class="btn btn-default pull-right" role="button"><i class="fa fa-plus"></i></a>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    List of {{ ucfirst('[[ model_plural ]]') }}
+  </div>
+  <div class="panel-body">
+    <div class="">
+      <table class="table table-striped" id="thegrid">
+        <thead>
+          <tr>
+            [[ foreach: columns ]]
+            <th>[[ i.display ]]</th>
+            [[ endforeach ]]
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($[[ model_plural ]] as $[[ model_singular ]])
+          <tr>
+            [[ foreach: columns ]]
+            <td>{{ $[[ model_singular ]]->[[ i.name ]] }}</td>
+            [[ endforeach ]]
+            <td><a href="{{ route('[[ route_path ]].show', [ '[[ model_singular ]]' => $[[ model_singular ]]->id ]) }}" class="btn btn-default"><i class="fa fa-eye"></i></a></td>
+            <td><a href="{{ route('[[ route_path ]].edit', [ '[[ model_singular ]]' => $[[ model_singular ]]->id ]) }}" class="btn btn-info"><i class="fa fa-pencil"></i></a></td>
+            <td><a onclick="return doDelete({{ $[[ model_singular ]]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a></td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 @endsection
