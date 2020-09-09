@@ -70,7 +70,7 @@ class [[controller_name]]Controller extends Controller
 
     $[[model_singular]]->save();
 
-    return route('[[route_path]].index')->redirect();
+    return redirect()->route('[[route_path]].index');
   }
 
   public function store(Request $request)
@@ -84,6 +84,6 @@ class [[controller_name]]Controller extends Controller
 
     $[[model_singular]]->delete();
 
-    return route('[[ route_path ]].index')->redirect();
+    return redirect()->route('[[route_path]].index');
   }
 }
