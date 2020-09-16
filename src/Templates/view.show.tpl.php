@@ -9,12 +9,14 @@
   <div class="panel-body">
     <form class="form-horizontal">
       [[ foreach:columns ]]
+      [[ if: i.type != 'id' ]]
       <div class="form-group">
         <label for="[[ i.name ]]" class="col-sm-3 control-label">[[ i.display ]]</label>
         <div class="col-sm-6">
           <input type="text" name="[[ i.name ]]" id="[[ i.name ]]" class="form-control" value="{{ isset($[[ model_singular ]]) ? $[[ model_singular ]]->[[ i.name ]] : '' }}" readonly="readonly">
         </div>
       </div>
+      [[ endif ]]
       [[ endforeach ]]
       <div class="form-group">
         <div class="col-sm-offset-3 col-sm-6">

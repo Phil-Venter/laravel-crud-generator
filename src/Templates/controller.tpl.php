@@ -11,41 +11,28 @@ use [[appns]][[model_uc]];
 
 class [[controller_name]]Controller extends Controller
 {
-  public function __construct()
+  public function index()
   {
-  }
-
-  public function index(Request $request)
-  {
-    $[[model_plural]] = [[model_uc]]::all();
+    $[[model_plural]] = [[model_uc]]::paginate(10);
     return view('[[view_folder]].index', compact('[[model_plural]]'));
   }
 
-  public function create(Request $request)
-  {
-    return view('[[view_folder]].add');
-  }
-
-  public function edit(Request $request, $id)
-  {
-    $[[model_singular]] = [[model_uc]]::findOrFail($id);
-    return view('[[view_folder]].add', compact('[[model_singular]]'));
-  }
-
-  public function show(Request $request, $id)
+  public function show($id)
   {
     $[[model_singular]] = [[model_uc]]::findOrFail($id);
     return view('[[view_folder]].show', compact('[[model_singular]]'));
   }
 
-  public function update(Request $request)
+  public function edit($id)
   {
-    $[[model_singular]] = null;
-    if ($request->id > 0) {
-      $[[model_singular]] = [[model_uc]]::findOrFail($request->id);
-      } else {
-      $[[model_singular]] = new [[model_uc]];
-    }
+    $[[model_singular]] = [[model_uc]]::findOrFail($id);
+    return view('[[view_folder]].add', compact('[[model_singular]]'));
+  }
+
+  public function update(Request $request, $id)
+  {
+    $[[model_singular]] = new [[model_uc]];
+    if ($id) $[[model_singular]] = [[model_uc]]::findOrFail($id);
 
     [[foreach:columns]]
       [[ if:i.type == 'string' ]]
@@ -69,8 +56,12 @@ class [[controller_name]]Controller extends Controller
     [[endforeach]]
 
     $[[model_singular]]->save();
-
     return redirect()->route('[[route_path]].index');
+  }
+
+  public function create()
+  {
+    return view('[[view_folder]].add');
   }
 
   public function store(Request $request)
@@ -78,12 +69,10 @@ class [[controller_name]]Controller extends Controller
     return $this->update($request);
   }
 
-  public function destroy(Request $request, $id)
+  public function destroy($id)
   {
     $[[model_singular]] = [[model_uc]]::findOrFail($id);
-
     $[[model_singular]]->delete();
-
     return redirect()->route('[[route_path]].index');
   }
 }
