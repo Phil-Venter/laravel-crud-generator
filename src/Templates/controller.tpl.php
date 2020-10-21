@@ -29,7 +29,7 @@ class [[controller_name]]Controller extends Controller
     return view('[[view_folder]].add', compact('[[model_singular]]'));
   }
 
-  public function update(Request $request, $id)
+  public function update(Request $request, $id = null)
   {
     $[[model_singular]] = new [[model_uc]];
     if ($id) $[[model_singular]] = [[model_uc]]::findOrFail($id);

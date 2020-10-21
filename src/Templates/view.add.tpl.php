@@ -46,10 +46,12 @@
       </div>
       [[ endif ]]
       [[ if: i.type == 'boolean' ]]
-      <div class="col-sm-9 col-sm-offset-3">
-        <label>
-          <input name="[[ i.name ]]" id="[[ i.name ]]" type="checkbox" {{ isset($[[ model_singular ]]) ? $[[ model_singular ]]->[[ i.name ]] ? 'checked' : '' : '' }}> [[ i.display ]]
-        </label>
+      <div class="form-group">
+        <div class="col-sm-9 col-sm-offset-3">
+          <label>
+            <input name="[[ i.name ]]" id="[[ i.name ]]" type="checkbox" {{ isset($[[ model_singular ]]) ? $[[ model_singular ]]->[[ i.name ]] ? 'checked' : '' : '' }}> [[ i.display ]]
+          </label>
+        </div>
       </div>
       [[ endif ]]
       [[ if: i.type == 'unknown' ]]
